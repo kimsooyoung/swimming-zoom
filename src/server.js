@@ -13,17 +13,19 @@ app.get("/*", (_, res) => res.redirect("/"));
 const handleListen = () => console.log(`Listening on https://localhost:3000`);
 
 const server = http.createServer(app);
-const wss = new WebSocket.Server({server});
+const wss = new WebSocket.Server({ server });
+
+const sockets = [];
 
 wss.on("connection", (socket) => {
-    console.log("Connected to Browser ✅");
-    socket.on("close", () => {
-        console.log("Disconnected to Browser ❌");
-    });
-    socket.on("message", (msg)=>{
-        console.log(`Msg from Brower : ${msg}`);
-    });
-    socket.send("hello!!!");
+  sockets.push(socket);
+  console.log("Connected to Browser ✅");
+  socket.on("close", () => {
+    console.log("Disconnected to Browser ❌");
+  });
+  socket.on("message", (msg) => {
+    sockets.forEach((aSocket) => aSocket.send(msg.toString()));
+  });
 });
 
 server.listen(3000, handleListen);
