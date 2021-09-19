@@ -19,7 +19,9 @@ wsServer.on("connection", (socket) => {
   socket.on("enter_room", (msg, done) => {
     console.log(msg);
     setTimeout(() => {
-      done();
+      // This code is just call function from FrontEnd
+      // IT IS NOT RUN IN BackEnd
+      done("Done!! And I'm Backend");
     }, 3000);
   });
 });
